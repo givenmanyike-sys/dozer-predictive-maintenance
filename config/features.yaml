@@ -1,0 +1,23 @@
+# Sensors selected from the supplied metadata and OEM threshold sheet.
+# The initial modelling set focuses on failure-relevant signals. Broader sensor
+# coverage can be added after EDA demonstrates that it adds information.
+sensors:
+  - Engine Speed Max
+  - Engine Speed Avg
+  - Blow-by Press Max
+  - Oil Press LoIdle Min
+  - Oil Press HiIdle Min
+  - Oil Temp Max
+  - Coolant Temp Max
+  - Boost Press Max
+  - LB Front Exh Temp
+  - LB Rear Exh Temp
+  - RB Front Exh Temp
+  - RB Rear Exh Temp
+  - Fuel Rate
+  - Hyd Oil Temp Max
+  - Front Pump Press Max
+  - Rear Pump Press Max
+  - TM Main Press Max
+  - TC Oil Temp Max
+  - Pass Times

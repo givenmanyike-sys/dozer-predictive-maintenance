@@ -1,0 +1,57 @@
+# Central project configuration.
+# Keeping paths and modelling assumptions here prevents pipeline scripts from
+# accumulating hard-coded values that are difficult to audit or change.
+project:
+  random_state: 42
+  raw_file: data/raw/dozer_predictive_maintenance.xlsx
+  processed_file: data/processed/modeling_base.csv
+  featured_file: data/processed/modeling_features.csv
+
+# These names document the data contract used by the pipeline. If the source
+# workbook changes its column names, update the contract here and in ingestion
+# validation rather than scattering the new names across scripts.
+columns:
+  machine_id: Machine ID
+  timestamp: Timestamp
+  smr: SMR
+  event_machine: Machine ID
+  event_timestamp: Event Timestamp
+  event_category: Category
+
+# Target settings are deliberately separate from feature settings. The target
+# is created from the ground-truth event log, not from OEM threshold breaches.
+target:
+  horizons_operating_hours: [6, 12, 24, 48, 72]
+  default_horizon_operating_hours: 24
+  positive_event: Unplanned Failure
+
+# Feature windows are measured in observed operating rows. All temporal
+# features must be constructed using historical observations only.
+features:
+  rolling_windows: [6, 24, 72]
+  slope_windows: [6, 24, 72]
+  threshold_windows: [6, 24, 72]
+  lag_periods: [1, 6, 24]
+  min_periods: 3
+
+# Validation settings are chronological by design. Random row-level splitting
+# is not appropriate for this time-series predictive-maintenance problem.
+validation:
+  n_splits: 4
+  test_size_operating_hours: 24
+  gap_operating_hours: 0
+  event_pre_hours: 72
+  event_post_hours: 24
+
+# The probability threshold is only a starting configuration. Final alert
+# threshold selection should consider false-alarm cost and warning coverage.
+model:
+  probability_threshold: 0.5
+  persistence_hours: 1
+  max_iter: 500
+
+# Robustness settings define controlled sensitivity experiments. They do not
+# represent claims about the amount of missingness or drift in production.
+robustness:
+  missing_rates: [0.0, 0.05, 0.10, 0.20, 0.30]
+  drift_multipliers: [0.00, 0.02, 0.05, 0.10]

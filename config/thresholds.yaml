@@ -1,0 +1,49 @@
+thresholds:
+  Blow-by Press Max:
+    direction: HIGH
+    warning: 25.0
+    critical: 40.0
+  Oil Press LoIdle Min:
+    direction: LOW
+    warning: 15.0
+    critical: 10.0
+  Oil Press HiIdle Min:
+    direction: LOW
+    warning: 40.0
+    critical: 35.0
+  Oil Temp Max:
+    direction: HIGH
+    warning: 205.0
+    critical: 215.0
+  Coolant Temp Max:
+    direction: HIGH
+    warning: 210.0
+    critical: 225.0
+  Boost Press Max:
+    direction: HIGH
+    warning: 55.0
+    critical: 65.0
+  LB Front Exh Temp:
+    direction: HIGH
+    warning: 1400.0
+    critical: 1500.0
+  LB Rear Exh Temp:
+    direction: HIGH
+    warning: 1350.0
+    critical: 1450.0
+  RB Front Exh Temp:
+    direction: HIGH
+    warning: 1370.0
+    critical: 1400.0
+  RB Rear Exh Temp:
+    direction: HIGH
+    warning: 1380.0
+    critical: 1450.0
+  Hyd Oil Temp Max:
+    direction: HIGH
+    warning: 195.0
+    critical: 215.0
+  TM Main Press Max:
+    direction: HIGH
+    warning: 500.0
+    critical: 600.0

@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.env
+.DS_Store
+
+# Generated data and artifacts
+data/interim/*
+data/processed/*
+models/*.joblib
+models/*.json
+outputs/figures/*
+outputs/metrics/*
+outputs/reports/*
+
+# Keep directory placeholders
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/metrics/.gitkeep
+!outputs/reports/.gitkeep
