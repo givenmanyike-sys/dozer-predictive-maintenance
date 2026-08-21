@@ -14,16 +14,11 @@ import pandas as pd
 class TemporalFold:
     """Container describing one chronological train/test split.
 
-    Attributes
-    ----------
-    train:
-        Observations available to the model during training.
-    test:
-        Observations that simulate future observations.
-    fold_number:
-        Human-readable fold identifier used in reports.
-    description:
-        Short explanation of how the fold was constructed.
+    Attributes:
+        train (pd.DataFrame): Observations available to the model during training.
+        test (pd.DataFrame): Observations that simulate future observations.
+        fold_number (int): Human-readable fold identifier used in reports.
+        description (str): Short explanation of how the fold was constructed.
     """
 
     train: pd.DataFrame
@@ -44,18 +39,19 @@ def expanding_time_folds(
     window later than the training observations. This approximates repeated
     model retraining as new telemetry becomes available.
 
-    Parameters
-    ----------
-    df:
-        Data containing a ``Timestamp`` column.
-    n_splits:
-        Number of chronological validation windows.
-    test_size:
-        Number of observations in each test window.
-    gap:
-        Optional number of observations between training and test windows.
-        A gap can be useful when feature windows or operational delays create a
-        risk of information bleeding across the split.
+    Args:
+        df (pd.DataFrame): Data containing a 'Timestamp' column.
+        n_splits (int): Number of chronological validation windows. Defaults to 4.
+        test_size (int): Number of observations in each test window. Defaults to 24.
+        gap (int): Optional number of observations between training and test windows.
+            A gap can be useful when feature windows or operational delays create a
+            risk of information bleeding across the split. Defaults to 0.
+
+    Returns:
+        list[TemporalFold]: List of chronological train/test fold containers.
+
+    Raises:
+        ValueError: If n_splits or test_size < 1, or gap < 0, or dataset too small.
     """
     if n_splits < 1 or test_size < 1 or gap < 0:
         raise ValueError("n_splits and test_size must be positive; gap cannot be negative.")
@@ -108,9 +104,19 @@ def event_centric_folds(
     test set contains the affected machine's pre-event and post-event context.
     An optional embargo can widen the separation between training and testing.
 
-    This is an evaluation helper, not a substitute for the final production
-    validation design. With only a small number of failures, uncertainty must
-    be reported explicitly.
+    Args:
+        df (pd.DataFrame): Telemetry DataFrame with 'Timestamp' and 'Machine ID'.
+        events (pd.DataFrame): Event log with 'Event Timestamp', 'Machine ID', and 'Category'.
+        event_category (str): Category representing failure. Defaults to 'Unplanned Failure'.
+        pre_event_hours (int): Hours prior to event included in test window. Defaults to 72.
+        post_event_hours (int): Hours after event included in test window. Defaults to 24.
+        embargo_hours (int): Separation buffer between train and test. Defaults to 0.
+
+    Returns:
+        list[TemporalFold]: Chronological event-centric folds.
+
+    Raises:
+        ValueError: If window parameters are invalid.
     """
     if pre_event_hours < 1 or post_event_hours < 0 or embargo_hours < 0:
         raise ValueError("Event window sizes must be non-negative, with pre_event_hours positive.")

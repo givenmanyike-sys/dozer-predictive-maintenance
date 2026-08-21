@@ -11,30 +11,26 @@ def add_failure_target(
 ) -> pd.DataFrame:
     """Add a binary target indicating an upcoming genuine failure.
 
-    Parameters
-    ----------
-    telemetry:
-        Machine telemetry containing ``Machine ID`` and ``Timestamp``.
-    events:
-        Ground-truth event log containing ``Machine ID``, ``Event Timestamp``
-        and ``Category``.
-    horizon_operating_hours:
-        Number of subsequent observed operating rows considered an early-
-        warning horizon.
-    positive_event:
-        Event category that represents a genuine mechanical failure.
+    Args:
+        telemetry (pd.DataFrame): Machine telemetry containing 'Machine ID' and 'Timestamp'.
+        events (pd.DataFrame): Ground-truth event log with 'Machine ID', 'Event Timestamp',
+            and 'Category'.
+        horizon_operating_hours (int): Number of subsequent observed operating rows
+            considered the early-warning horizon window.
+        positive_event (str): Event category that represents a true mechanical breakdown.
+            Defaults to 'Unplanned Failure'.
 
-    Returns
-    -------
-    pandas.DataFrame
-        Telemetry with a ``target_failure`` column.
+    Returns:
+        pd.DataFrame: Telemetry DataFrame augmented with 'target_failure' binary column.
 
-    Notes
-    -----
-    False alarms and scheduled maintenance are intentionally excluded because
-    they do not represent the mechanical failure the assessment asks us to
-    predict. The event log therefore defines the target, while OEM thresholds
-    remain feature inputs only.
+    Raises:
+        ValueError: If horizon_operating_hours < 1.
+
+    Notes:
+        False alarms and scheduled maintenance are intentionally excluded because
+        they do not represent the mechanical failure the assessment asks us to
+        predict. The event log therefore defines the target, while OEM thresholds
+        remain feature inputs only.
     """
     if horizon_operating_hours < 1:
         raise ValueError("horizon_operating_hours must be positive")

@@ -17,6 +17,17 @@ def add_threshold_features(
     Current breach indicators describe the current sensor state. Historical
     count features use a one-step shift so that a feature at time ``t`` only
     summarises threshold behaviour observed before ``t``.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        thresholds (dict): OEM parameter threshold mapping with direction/warning/critical.
+        windows (list[int]): Historical window periods (in operating hours).
+
+    Returns:
+        pd.DataFrame: DataFrame augmented with breach indicators and count features.
+
+    Raises:
+        ValueError: If an unsupported threshold direction is encountered.
     """
     result = df.copy()
 

@@ -21,6 +21,16 @@ def _historical_rolling(
     it, the value at the current timestamp would be included in its own rolling
     feature. That would make the feature look predictive during development
     while changing its meaning in a real-time prediction system.
+
+    Args:
+        series (pd.Series): Sensor series to aggregate.
+        groups (pd.Series): Grouping series (Machine ID).
+        window (int): Size of the rolling observation window.
+        function (str): Aggregation function name ('mean' or 'std').
+        min_periods (int): Minimum valid observations required in window.
+
+    Returns:
+        pd.Series: Calculated rolling statistics series.
     """
     historical = series.groupby(groups, sort=False).shift(1)
     rolling = historical.groupby(groups, sort=False).rolling(
@@ -36,6 +46,14 @@ def add_lag_features(df: pd.DataFrame, sensors: list[str], lags: list[int]) -> p
     A lag of one represents the previous observed machine-hour. Grouping by
     machine is essential because the previous row globally could belong to a
     different dozer.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        sensors (list[str]): List of sensor column names.
+        lags (list[int]): List of lag steps to generate.
+
+    Returns:
+        pd.DataFrame: DataFrame augmented with lag features.
     """
     result = df.copy()
     features = {}
@@ -65,6 +83,15 @@ def add_rolling_features(
     The rolling windows are measured in observed operating rows rather than
     assuming that every calendar hour contains a telemetry observation. This
     matches the supplied operating-hour style of the assessment data.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        sensors (list[str]): List of sensor column names.
+        windows (list[int]): List of window sizes in operating hours.
+        min_periods (int): Minimum observations to compute statistic. Defaults to 3.
+
+    Returns:
+        pd.DataFrame: DataFrame augmented with rolling mean and std features.
     """
     result = df.copy()
     features = {}
@@ -94,6 +121,14 @@ def add_slope_features(df: pd.DataFrame, sensors: list[str], windows: list[int])
     A simple end-to-end slope is used as an interpretable degradation signal.
     The current value is compared with a value from ``window`` observations in
     the past. The calculation remains machine-specific through grouped shifts.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        sensors (list[str]): List of sensor column names.
+        windows (list[int]): List of window sizes for slope calculation.
+
+    Returns:
+        pd.DataFrame: DataFrame augmented with slope features.
     """
     result = df.copy()
     features = {}
@@ -112,7 +147,16 @@ def add_slope_features(df: pd.DataFrame, sensors: list[str], windows: list[int])
 
 
 def add_change_features(df: pd.DataFrame, sensors: list[str], lags: list[int]) -> pd.DataFrame:
-    """Add signed changes from selected historical sensor lags."""
+    """Add signed changes from selected historical sensor lags.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        sensors (list[str]): List of sensor column names.
+        lags (list[int]): List of lag periods for delta calculation.
+
+    Returns:
+        pd.DataFrame: DataFrame augmented with signed delta features.
+    """
     result = df.copy()
     features = {}
 

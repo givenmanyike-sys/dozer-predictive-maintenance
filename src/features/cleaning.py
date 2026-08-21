@@ -4,12 +4,17 @@ import pandas as pd
 
 
 def prepare_telemetry(telemetry: pd.DataFrame) -> pd.DataFrame:
-    """Sort telemetry and coerce sensor columns to numeric values.
+    """Sort telemetry chronologically by machine and coerce sensor columns to numeric.
 
-    Missing values are intentionally preserved. Imputation belongs inside the
-    model training pipeline so that imputation parameters are learned from the
-    training data only. Performing imputation here would risk leaking future
-    information into validation data.
+    Missing values are intentionally preserved as NaN rather than imputed here.
+    Imputation is encapsulated inside downstream sklearn model pipelines to ensure
+    imputation parameters are learned strictly from training folds.
+
+    Args:
+        telemetry (pd.DataFrame): Raw ingested telemetry DataFrame.
+
+    Returns:
+        pd.DataFrame: Cleaned, sorted telemetry indexed by machine and time.
     """
     df = telemetry.copy()
 

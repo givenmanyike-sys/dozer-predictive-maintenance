@@ -44,22 +44,17 @@ def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
 def load_workbook(path: str | Path) -> dict[str, pd.DataFrame]:
     """Load and lightly normalise the logical tables in the assessment workbook.
 
-    Parameters
-    ----------
-    path:
-        Path to the supplied Excel workbook.
+    Args:
+        path (str | Path): Path to the supplied Excel workbook.
 
-    Returns
-    -------
-    dict[str, pandas.DataFrame]
-        Dictionary containing ``telemetry``, ``events``, ``metadata`` and
-        ``thresholds`` tables.
+    Returns:
+        dict[str, pd.DataFrame]: Dictionary containing 'telemetry', 'events',
+            'metadata', and 'thresholds' DataFrames.
 
-    Notes
-    -----
-    This function performs ingestion and basic structural cleaning only. It
-    deliberately does not impute missing values, create model features, or
-    construct labels. Those responsibilities belong to later pipeline stages.
+    Notes:
+        This function performs ingestion and basic structural cleaning only. It
+        deliberately does not impute missing values, create model features, or
+        construct labels. Those responsibilities belong to later pipeline stages.
     """
     path = Path(path)
 

@@ -28,6 +28,19 @@ def build_features(
     containing the individual feature formulas. Keeping each transformation
     separate makes it easier to test, review and replace one feature family
     without changing the rest of the pipeline.
+
+    Args:
+        df (pd.DataFrame): Telemetry DataFrame.
+        sensors (list[str]): List of monitored sensor channel names.
+        thresholds (dict): OEM reference threshold specifications.
+        rolling_windows (list[int]): Window periods for rolling statistics.
+        slope_windows (list[int]): Window periods for slope estimations.
+        lag_periods (list[int]): Lag periods for sensor history.
+        threshold_windows (list[int]): Windows for breach persistence counts.
+        min_periods (int): Minimum valid values for rolling calculation. Defaults to 3.
+
+    Returns:
+        pd.DataFrame: Feature matrix containing original telemetry and all derived signals.
     """
     # Normalise ordering and numeric types before any grouped temporal feature
     # is calculated. All downstream feature functions assume this contract.

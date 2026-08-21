@@ -40,8 +40,14 @@ def validate_telemetry(
     The checks here are intentionally conservative. They verify that the
     tables have the keys and basic data types required by later stages, but
     they do not attempt to decide whether a sensor value is physically valid.
-    Domain-specific plausibility checks can be added after the metadata are
-    fully understood.
+
+    Args:
+        telemetry (pd.DataFrame): Ingested raw telemetry table.
+        events (pd.DataFrame): Ground-truth event log table.
+        thresholds (pd.DataFrame): OEM reference thresholds table.
+
+    Returns:
+        ValidationReport: Summary object with individual check flags and logs.
     """
     required = {"Machine ID", "SMR", "Timestamp"}
 
