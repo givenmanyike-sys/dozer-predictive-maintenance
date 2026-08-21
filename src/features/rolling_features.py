@@ -1,9 +1,8 @@
-"""Leakage-safe temporal feature engineering utilities.
+"""Temporal feature engineering utilities.
 
-All temporal features in this module are deliberately constructed from past
-observations. The current observation is excluded from rolling statistics so
-that a feature at time ``t`` represents information that was available before
-the prediction was made.
+Rolling statistics in this module are deliberately constructed from past
+observations. Slope and change features also use the current observation,
+which is available when a prediction is made at time ``t``.
 """
 
 import pandas as pd
@@ -40,7 +39,6 @@ def add_lag_features(df: pd.DataFrame, sensors: list[str], lags: list[int]) -> p
     """
     result = df.copy()
     features = {}
-    groups = result["Machine ID"]
 
     for sensor in sensors:
         if sensor not in result.columns:
@@ -114,7 +112,7 @@ def add_slope_features(df: pd.DataFrame, sensors: list[str], windows: list[int])
 
 
 def add_change_features(df: pd.DataFrame, sensors: list[str], lags: list[int]) -> pd.DataFrame:
-    """Add historical absolute change features for selected sensor lags."""
+    """Add signed changes from selected historical sensor lags."""
     result = df.copy()
     features = {}
 

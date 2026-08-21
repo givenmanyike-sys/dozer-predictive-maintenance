@@ -35,7 +35,9 @@ def classification_metrics(y_true, probability, threshold: float = 0.5) -> dict[
     has_both_classes = len(np.unique(y_true)) > 1
 
     return {
-        "pr_auc": float(average_precision_score(y_true, probability)) if has_both_classes else float("nan"),
+        "pr_auc": float(average_precision_score(y_true, probability))
+        if has_both_classes
+        else float("nan"),
         "roc_auc": float(roc_auc_score(y_true, probability)) if has_both_classes else float("nan"),
         "precision": float(precision_score(y_true, prediction, zero_division=0)),
         "recall": float(recall_score(y_true, prediction, zero_division=0)),
