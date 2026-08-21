@@ -13,15 +13,22 @@ from sklearn.metrics import (
 
 
 def classification_metrics(y_true, probability, threshold: float = 0.5) -> dict[str, float]:
-    """Calculate probability and threshold-based metrics for one evaluation set.
+    """Calculate probability ranking and threshold-based metrics for binary evaluation.
 
-    Precision-recall metrics are included because genuine failures are rare and
-    a high number of healthy machine-hours can make accuracy look impressive
-    even when the alerting system is operationally poor.
+    Precision-recall metrics are prioritized because genuine failures are rare and
+    a high number of healthy machine-hours can make standard accuracy misleading.
 
-    The probability threshold is kept explicit because alert generation is a
-    business decision. The final threshold should be selected from validation
-    results using false-alarm cost and desired warning coverage.
+    Args:
+        y_true (array-like): Ground-truth binary labels (0 or 1).
+        probability (array-like): Predicted positive class failure probabilities.
+        threshold (float): Decision probability cutoff. Defaults to 0.5.
+
+    Returns:
+        dict[str, float]: Dictionary containing PR-AUC, ROC-AUC, Precision, Recall,
+            F1, Balanced Accuracy, False Positive Rate, True Negative Rate, and raw counts.
+
+    Raises:
+        ValueError: If threshold is not between 0 and 1.
     """
     if not 0 <= threshold <= 1:
         raise ValueError("Threshold must be between 0 and 1.")

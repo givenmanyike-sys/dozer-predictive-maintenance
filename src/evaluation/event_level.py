@@ -13,6 +13,14 @@ def first_alert_warning_time(
     Event-level warning time is more operationally meaningful than counting
     every correctly classified machine-hour. A maintenance planner needs to
     know whether the first useful alert arrived early enough to act.
+
+    Args:
+        predictions (pd.DataFrame): Telemetry DataFrame with 'alert' and 'Timestamp'.
+        events (pd.DataFrame): Event log with 'Category', 'Machine ID', and 'Event Timestamp'.
+        machine_column (str): Machine identifier column name. Defaults to 'Machine ID'.
+
+    Returns:
+        pd.DataFrame: Table with each failure event and its calculated warning_hours.
     """
     failures = events.loc[events["Category"].eq("Unplanned Failure")].copy()
     rows = []
@@ -62,6 +70,13 @@ def false_alert_rate(predictions: pd.DataFrame, observed_hours: int | None = Non
     false-positive rate requires ground-truth labels. The distinction matters
     in production because an alert on a genuinely deteriorating machine may be
     correct even if a failure has not yet occurred.
+
+    Args:
+        predictions (pd.DataFrame): Predictions DataFrame with 'alert' column.
+        observed_hours (int | None): Total operating hours. If None, uses len(predictions).
+
+    Returns:
+        float: Alert frequency per operating hour.
     """
     alert_count = int(predictions["alert"].sum())
     hours = observed_hours or len(predictions)

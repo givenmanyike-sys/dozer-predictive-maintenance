@@ -14,6 +14,14 @@ def inject_additive_drift(
     The term additive is retained for compatibility with the existing project
     interface, but the implementation is proportional: a value is multiplied
     by ``1 + multiplier``. This approximates a systematic calibration shift.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        sensors (list[str]): List of sensor columns to perturb.
+        multiplier (float): Proportional drift factor (e.g., 0.05 for +5%).
+
+    Returns:
+        pd.DataFrame: Perturbed DataFrame with drifted sensor values.
     """
     result = df.copy()
 
@@ -35,6 +43,17 @@ def population_stability_index(
     distribution observed during model development with the distribution seen
     later in production. It is a drift indicator, not proof that model
     performance has deteriorated.
+
+    Args:
+        expected (pd.Series): Baseline/reference sensor distribution series.
+        actual (pd.Series): Current production sensor distribution series.
+        bins (int): Number of quantile bins to partition data. Defaults to 10.
+
+    Returns:
+        float: Calculated Population Stability Index metric.
+
+    Raises:
+        ValueError: If bins < 2.
     """
     if bins < 2:
         raise ValueError("bins must be at least 2.")

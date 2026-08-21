@@ -22,6 +22,18 @@ def backtest_sensor_forecasters(
     Forecasting is treated as a supporting degradation-analysis task. We do not
     assume that ARIMA or another complex model is appropriate merely because
     the source data are time series.
+
+    Args:
+        series (pd.Series): Sensor time series to forecast.
+        horizon (int): Number of steps ahead to evaluate. Defaults to 6.
+        minimum_history (int): Minimum required prior observations before starting
+            backtest origins. Defaults to 24.
+
+    Returns:
+        pd.DataFrame: Evaluation metrics (MAE and RMSE) per model and origin.
+
+    Raises:
+        ValueError: If horizon < 1 or minimum_history < 1.
     """
     if horizon < 1 or minimum_history < 1:
         raise ValueError("horizon and minimum_history must be positive.")

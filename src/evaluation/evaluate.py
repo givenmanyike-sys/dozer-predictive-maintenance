@@ -21,6 +21,17 @@ def evaluate_candidates(
     The function deliberately skips folds where the training data contain only
     one target class. A classifier cannot learn a meaningful binary decision
     boundary from a training set containing only failures or only healthy rows.
+
+    Args:
+        df (pd.DataFrame): Feature DataFrame containing 'target_failure' and 'Timestamp'.
+        events (pd.DataFrame): Ground-truth event log DataFrame.
+        pre_event_hours (int): Pre-event window size for test fold. Defaults to 72.
+        post_event_hours (int): Post-event window size for test fold. Defaults to 24.
+        random_state (int): Random seed for reproducibility. Defaults to 42.
+        threshold (float): Decision probability threshold. Defaults to 0.5.
+
+    Returns:
+        pd.DataFrame: Table of evaluation metrics per candidate model and fold.
     """
     rows = []
 

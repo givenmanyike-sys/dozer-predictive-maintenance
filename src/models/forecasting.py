@@ -17,6 +17,16 @@ def naive_forecast(series: pd.Series, horizon: int) -> np.ndarray:
     The naive forecast is intentionally simple. It provides a strong baseline
     for telemetry that changes slowly and gives us a reference against which
     more complex forecasting methods can be judged.
+
+    Args:
+        series (pd.Series): Historical observations of a sensor channel.
+        horizon (int): Number of steps ahead to forecast.
+
+    Returns:
+        np.ndarray: Constant forecast array of length `horizon`.
+
+    Raises:
+        ValueError: If horizon < 1 or the series is empty.
     """
     if horizon < 1:
         raise ValueError("Forecast horizon must be positive.")
@@ -34,6 +44,16 @@ def exponential_smoothing_forecast(series: pd.Series, horizon: int) -> np.ndarra
     The implementation is intentionally modest. We should only introduce more
     complex models such as ARIMA or state-space variants if diagnostics and
     backtesting show that the added complexity provides meaningful benefit.
+
+    Args:
+        series (pd.Series): Historical observations of a sensor channel.
+        horizon (int): Number of steps ahead to forecast.
+
+    Returns:
+        np.ndarray: Projected sensor values over the forecast horizon.
+
+    Raises:
+        ValueError: If horizon < 1.
     """
     if horizon < 1:
         raise ValueError("Forecast horizon must be positive.")

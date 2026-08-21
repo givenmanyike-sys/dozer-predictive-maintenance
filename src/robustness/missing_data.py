@@ -10,6 +10,17 @@ def inject_missingness(df: pd.DataFrame, rate: float, seed: int = 42) -> pd.Data
     This function is intended for sensitivity analysis, not for production data
     cleaning. The purpose is to simulate degraded telemetry and measure how the
     predictive system responds when sensor coverage becomes less reliable.
+
+    Args:
+        df (pd.DataFrame): Input telemetry DataFrame.
+        rate (float): Proportion of values to mask as NaN (0 to 1).
+        seed (int): Random seed for reproducibility. Defaults to 42.
+
+    Returns:
+        pd.DataFrame: DataFrame with injected missing values in unprotected numeric columns.
+
+    Raises:
+        ValueError: If rate is not between 0 and 1.
     """
     if not 0 <= rate <= 1:
         raise ValueError("Missingness rate must be between 0 and 1.")

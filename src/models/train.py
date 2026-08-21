@@ -12,7 +12,13 @@ from sklearn.preprocessing import StandardScaler
 
 @dataclass
 class TrainedModel:
-    """Bundle a fitted pipeline with the exact feature columns used by it."""
+    """Bundle a fitted pipeline with the exact feature columns used by it.
+
+    Attributes:
+        name (str): Model identifier.
+        pipeline (Pipeline): Fitted scikit-learn Pipeline with preprocessing & classifier.
+        feature_columns (list[str]): List of column names used during training.
+    """
 
     name: str
     pipeline: Pipeline
@@ -28,6 +34,17 @@ def prepare_xy(
     Machine ID and Timestamp are excluded because they are identifiers and can
     allow the model to memorise machine-specific or temporal structure rather
     than learning generalisable sensor relationships.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame containing features and target.
+        target (str): Target column name. Defaults to 'target_failure'.
+
+    Returns:
+        tuple[pd.DataFrame, pd.Series, list[str]]: Feature matrix X, target series y,
+            and the list of feature column names.
+
+    Raises:
+        ValueError: If no numeric features are found or target is missing.
     """
     excluded = {target, "Machine ID", "Timestamp", "Event Timestamp"}
 
@@ -57,13 +74,19 @@ def train_candidates(
     """Fit a compact, defensible set of candidate classifiers.
 
     The candidates deliberately cover different modelling assumptions:
-
     * Logistic regression provides an interpretable linear baseline.
     * Random forest captures non-linear interactions with limited tuning.
     * HistGradientBoosting provides a stronger non-linear baseline.
 
     Imputation is performed inside each sklearn pipeline so that the imputer is
     fitted on training data only. This is important for temporal validation.
+
+    Args:
+        train_df (pd.DataFrame): Training fold DataFrame with features and target.
+        random_state (int): Random seed for reproducibility. Defaults to 42.
+
+    Returns:
+        dict[str, TrainedModel]: Dictionary of fitted candidate model wrappers.
     """
     X, y, feature_columns = prepare_xy(train_df)
 
