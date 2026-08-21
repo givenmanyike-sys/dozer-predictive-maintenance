@@ -46,7 +46,7 @@ validation:
 # The probability threshold is only a starting configuration. Final alert
 # threshold selection should consider false-alarm cost and warning coverage.
 model:
-  probability_threshold: 0.5
+  probability_threshold: 0.10
   persistence_hours: 1
   max_iter: 500
 
