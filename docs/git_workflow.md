@@ -1,12 +1,11 @@
-# Git Workflow
+# Git Workflow & Branching Strategy
 
 ## Branches
 
-Use three long-lived branches:
-
+- `main`: default branch representing the clean, reviewed repository
+- `prod`: stable production release branch
+- `test`: release candidate validation branch
 - `dev`: active integration branch
-- `test`: release candidate validation
-- `prod`: stable branch representing the reviewed solution
 
 ## Feature branches
 
@@ -18,24 +17,13 @@ git pull
 git checkout -b feature/target-definition
 ```
 
-Keep each feature branch focused. Good examples:
-
-- `feature/data-validation`
-- `feature/target-definition`
-- `feature/rolling-features`
-- `feature/temporal-validation`
-- `feature/model-selection`
-- `feature/event-level-metrics`
-- `feature/robustness-analysis`
-- `feature/production-design`
-
-## Promotion
+## Promotion Flow
 
 ```text
-feature/* -> dev -> test -> prod
+feature/* ──► dev ──► test ──► prod ──► main
 ```
 
-Each promotion should have a pull request, passing tests and a concise explanation of the change.
+Each promotion should have clean commits, passing tests, and a clear operational summary.
 
 ## Commit style
 
