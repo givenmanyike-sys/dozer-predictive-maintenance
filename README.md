@@ -83,6 +83,7 @@ dozer-predictive-maintenance/
 │   └── thresholds.yaml         # OEM warning & critical parameter thresholds
 ├── data/                       # Telemetry data (raw immutable workbook & processed tables)
 ├── docs/                       # Engineering & operational documentation
+│   ├── executive_technical_report.md # Full technical presentation & executive report
 │   ├── findings.md             # In-depth empirical findings & fleet failure case studies
 │   ├── methodology.md          # Formal problem framing, leakage controls & metric choices
 │   ├── production_design.md    # Target architecture, alert cooldowns & drift monitoring
